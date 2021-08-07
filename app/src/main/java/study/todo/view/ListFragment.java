@@ -11,9 +11,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 import study.todo.R;
-import study.todo.log.ExpansionLog;
+import study.todo.model.adapter.TodoAdapter;
+import study.todo.model.data.TodoData;
+import study.todo.model.log.ExpansionLog;
 
 public class ListFragment extends Fragment {
 
@@ -37,6 +43,28 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ExpansionLog.d("Start");
+
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+
+        // LayoutManagerの設定 デフォルトで縦方向
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Stub Todo キャッシュとかJsonとか外部ファイルやDBから読み込み
+        ArrayList<TodoData> dataList = new ArrayList<>();
+        for (int i = 0; i <= 5; i++) {
+            TodoData data = new TodoData();
+            data.setDeadlineTime("期日 : " + i);
+            data.setTitle("タイトル : " + i);
+            data.setTitle("内容 : " + i);
+            dataList.add(data);
+        }
+
+        TodoAdapter adapter = new TodoAdapter(dataList);
+        recyclerView.setAdapter(adapter);
+        ExpansionLog.d("End");
     }
 
     @Override
